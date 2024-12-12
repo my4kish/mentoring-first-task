@@ -2,11 +2,12 @@ import { AsyncPipe, NgFor } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from "@angular/core";
 import { UsersApiService } from "../users-api.service";
 import { UserCardComponent } from "./user-card/user-card.component";
-import { UsersService } from "../users.service";
 import {MatDialog} from "@angular/material/dialog"
 import {MatButton} from "@angular/material/button"
 import { CreateEditUserDialogComponent } from "./create-edit-user-dialog/create-edit-user-dialog.component";
-import { LocalStorageService } from "../local-storage.service";
+import { Store } from "@ngrx/store";
+import { UsersActions } from "./store/users.actions";
+import { selectUsers } from "./store/users.selectors";
 
 export interface User {
   id:       number;
@@ -37,7 +38,7 @@ export interface userData {
   name: string,
   email: string,
   website: string,
-  companyName: string
+  companyName: string,
 }
 
 @Component({
@@ -50,22 +51,17 @@ export interface userData {
 })
 export class UserListComponent {
   private readonly usersApiService = inject(UsersApiService);
-  public readonly usersService = inject(UsersService);
   private readonly dialog = inject(MatDialog);
-  private readonly localeStorageService = inject(LocalStorageService);
   private isEdit: Boolean = false;
+  private readonly store = inject(Store);
+  public readonly users$ = this.store.select(selectUsers);
 
   constructor() {
 
     this.usersApiService.getUsers().subscribe(
       (response:any) => {
-        this.usersService.setUsers(response);
-        // this.localeStorageService.setItem('users', response) //для отката в изначальное
-        if (this.localeStorageService.getItem('users') === null) {
-          this.localeStorageService.setItem('users', response);
-        }      
-      }
-    )
+        this.store.dispatch(UsersActions.set({users:response}));    
+      });
 
   }
   
@@ -79,7 +75,6 @@ export class UserListComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('USER: ',user, 'RESULT: ', result)
       if (!result) return;
       this.isEdit ? this.editUser({...user, ...result}) : this.createUser(result);
     });
@@ -87,30 +82,27 @@ export class UserListComponent {
 
 
   deleteUser(id:number) {
-    this.usersService.deleteUser(id);
+    this.store.dispatch(UsersActions.delete({id}));
   }
 
-  public createUser(userData: userData) {
-    this.usersService.createUser({
-      id: new Date().getTime(),
-      name: userData.name,
-      email: userData.email,
-      website: userData.website,
-      company: {
-        name: userData.companyName,
-      }
-    });
+  public createUser(userData: any) {
+    this.store.dispatch(
+      UsersActions.create({
+        user: {
+          id: new Date().getTime(),
+          name: userData.name,
+          email: userData.email,
+          website: userData.website,
+          company: {
+            name: userData.companyName,
+          },
+        },
+      })
+    );
   }
 
-  public editUser(userData: userData) {
-    this.usersService.editUser({
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      website: userData.website,
-      company: {
-        name: userData.companyName,}
-    })
+  public editUser(user: any) {
+    this.store.dispatch(UsersActions.edit({user}));
   }
 
 }

@@ -1,4 +1,3 @@
-import { NgIf } from "@angular/common";
 import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogClose, MatDialogRef } from "@angular/material/dialog";
@@ -10,7 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
   selector:'app-create-user-dialog',
   templateUrl:'./create-edit-user-dialog.component.html',
   styleUrl:'./create-edit-user-dialog.component.scss',
-  imports:[ReactiveFormsModule, MatDialogClose, NgIf, MatInputModule, MatFormFieldModule, MatButtonModule],
+  imports:[ReactiveFormsModule, MatDialogClose, MatInputModule, MatFormFieldModule, MatButtonModule],
   standalone: true,
 })
 export class CreateEditUserDialogComponent{
@@ -33,13 +32,4 @@ export class CreateEditUserDialogComponent{
   public editUser() {
     this.dialogRef?.close(this.form.value)
   }
-
-  // public submitForm(): void {
-
-  //   this.dialogRef.close(this.form.value)
-
-  //   // this.createUser.emit('11');
-  //   // console.log({name: this.form.get('name')?.value});
-  //   // console.log('User is created');
-  // }
 }

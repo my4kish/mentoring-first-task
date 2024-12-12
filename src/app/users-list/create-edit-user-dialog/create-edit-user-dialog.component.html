@@ -19,17 +19,7 @@
       <mat-label>Компания</mat-label>
       <input matInput class="form-input" formControlName="companyName" />
     </mat-form-field>
-
-<!-- 
-    <p>Name: </p>
-    <input type="text" class="form-input" formControlName="name" />
-    <p>Email: </p>
-    <input type="text" class="form-input" formControlName="email" />
-    <p>Website: </p>
-    <input type="text" class="form-input" formControlName="website" />
-    <p>Company name: </p>
-    <input type="text" class="form-input" formControlName="companyName" /> -->
-
+    
     <button color="accent" mat-flat-button [mat-dialog-close]="form.value" [disabled]="form.invalid">{{this.data.isEdit ? 'Edit user' : 'Create user'}}</button>
   </form>
 </div>
