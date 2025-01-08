@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { User } from "./users-list/users-list.component";
+import { Injectable } from '@angular/core';
+import { User } from './users-list/users-list.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LocalStorageService{
+export class LocalStorageService {
   getItem(key: string): User[] | null {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;

@@ -13,11 +13,8 @@ import {MatButtonModule} from '@angular/material/button';
   standalone: true,
 })
 export class CreateEditUserDialogComponent{
-  readonly data = inject(MAT_DIALOG_DATA)
-  readonly dialogRef = inject(MatDialogRef<CreateEditUserDialogComponent>);
-
-  // @Output()
-  // createUser = new EventEmitter();
+  public readonly data = inject(MAT_DIALOG_DATA)
+  private readonly dialogRef = inject(MatDialogRef<CreateEditUserDialogComponent>);
 
   @Output()
   isEditable = new EventEmitter();

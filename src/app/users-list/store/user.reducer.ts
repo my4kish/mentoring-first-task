@@ -1,11 +1,10 @@
-import { createReducer, on } from "@ngrx/store"
-import { UsersActions } from "./users.actions"
-import { User } from "../users-list.component"
+import { createReducer, on } from '@ngrx/store';
+import { UsersActions } from './users.actions';
+import { User } from '../users-list.component';
 
-
-const initialState: { users: User[]} = {
+const initialState: { users: User[] } = {
   users: [],
-}
+};
 
 export const userReducer = createReducer(
   initialState,
@@ -16,7 +15,7 @@ export const userReducer = createReducer(
   on(UsersActions.edit, (state, payload) => ({
     ...state,
     users: state.users.map((user) => {
-      if(user.id === payload.user.id) {
+      if (user.id === payload.user.id) {
         return payload.user;
       } else {
         return user;
